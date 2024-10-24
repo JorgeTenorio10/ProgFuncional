@@ -11,7 +11,8 @@ object Main extends ArbolHuffman {
     val rama2 = RamaHuff(rama1, hojaO)
     val arbolHuffman = RamaHuff(hojaS, rama2)
 
-    print(s"Peso total del árbol: ${peso  (arbolHuffman)}")
+    print(s"Peso total del árbol: ${peso  (arbolHuffman)}\n")
+    print(s"Caracteres del árbol: ${caracteres(arbolHuffman)}\n")
 
   }
 
