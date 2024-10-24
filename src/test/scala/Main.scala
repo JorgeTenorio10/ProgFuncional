@@ -1,6 +1,6 @@
 
 
-object Main extends CodigoHuffman {
+object Main extends ArbolHuffman {
   def main(args: Array[String]): Unit = {
     val hojaS = HojaHuff('S', 4)
     val hojaO = HojaHuff('O', 3)
