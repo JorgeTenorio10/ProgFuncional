@@ -36,6 +36,23 @@ abstract class ArbolHuffman {
       case (ramaHuff: RamaHuff, 1 :: bitsRestantes) => decodificarAux(ramaHuff.nodoDch, bitsRestantes, codigo)
 
     listaCharsACadena(decodificarAux(this, bits, List.empty[Char]))
+
+  def codificarCaracter(caracter: Char, arbol: ArbolHuffman, camino: List[Bit]): List[Bit] = arbol match
+    case HojaHuff(c, _) if c == caracter => camino
+    case RamaHuff(nodoIzq, nodoDch) =>
+      if (nodoIzq.contieneCaracter(caracter)) codificarCaracter(caracter, nodoIzq, camino :+ 0)
+      else codificarCaracter(caracter, nodoDch, camino :+ 1)
+    case _ if contieneCaracter(caracter)==false => throw new IllegalArgumentException("Carácter no encontrado en el árbol")
+
+
+  def codificar(cadena: String): List[Bit] =
+    @tailrec
+    def codificarAux(resto: List[Char], resultado: List[Bit]): List[Bit] = resto match
+      case Nil => resultado
+      case caracter :: restoCadena => val codigoCaracter = codificarCaracter(caracter, this, List.empty[Bit])
+        codificarAux(restoCadena, resultado ++ codigoCaracter)
+
+    codificarAux(cadenaAListaChars(cadena), List.empty[Bit])
 }
 
 
