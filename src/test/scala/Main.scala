@@ -14,7 +14,7 @@ object Main extends ArbolHuffman {
     print(s"Peso total del árbol: ${peso  (arbolHuffman)}\n")
     print(s"Caracteres del árbol: ${caracteres(arbolHuffman)}\n")
     print(s"cadena 0100101101:${arbolHuffman.decodificar(listabits)}\n")
-
+    print(s"El arbol contiene el caracter:${arbolHuffman.contieneCaracter(" ".charAt(0))}\n")
   }
 
 }

@@ -13,7 +13,13 @@ abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match
     case HojaHuff(_, peso) => peso
     case RamaHuff(nodoIzq, nodoDcho) => peso(nodoIzq) + peso(nodoDcho)
-
+  def contieneCaracter(caracter:Char): Boolean=
+    def contieneCaracterAux(caracter:Char,caracteres:List[Char]): Boolean= caracteres match
+      case caracterArbol::res if caracterArbol==caracter =>true
+      case caracterArbol::res =>contieneCaracterAux(caracter,res)
+      case Nil => false
+    contieneCaracterAux(caracter,this.caracteres(this))
+  
   def caracteres(arbol: ArbolHuffman): List[Char] = arbol match
     case HojaHuff(caracter, _) => List(caracter)
     case RamaHuff(nodoIzq, nodoDcho) => caracteres(nodoIzq) ++ caracteres(nodoDcho)
