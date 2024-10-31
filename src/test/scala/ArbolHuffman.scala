@@ -8,6 +8,31 @@ def cadenaAListaChars(cadena:String):List[Char]=
 def listaCharsACadena(caracteres:List[Char]):String=
   caracteres.mkString
 
+def ListaCharsADistFrec(listaChar: List[Char]): List[(Char, Int)] = {
+  def contarCaracteres(lista: List[Char], acumulado: List[(Char, Int)]): List[(Char, Int)] = {
+    lista match {
+      case Nil => acumulado // Si la lista está vacía, devolvemos el acumulado actual
+      case cabeza :: cola =>
+        val (existe, actualizado) = actualizarFrecuencia(cabeza, acumulado)
+        if (existe) contarCaracteres(cola, actualizado)
+        else contarCaracteres(cola, (cabeza, 1) :: acumulado)
+    }
+  }
+
+  def actualizarFrecuencia(caracter: Char, acumulado: List[(Char, Int)]): (Boolean, List[(Char, Int)]) = {
+    acumulado match {
+      case Nil => (false, Nil)
+      case (car, freq) :: resto =>
+        if (car == caracter) (true, (car, freq + 1) :: resto) // Actualizamos la frecuencia
+        else {
+          val (encontrado, listaActualizada) = actualizarFrecuencia(caracter, resto)
+          (encontrado, (car, freq) :: listaActualizada)
+        }
+    }
+  }
+
+  contarCaracteres(listaChar, Nil)
+}
 
 abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match

@@ -17,6 +17,8 @@ object Main extends ArbolHuffman {
     print(s"cadena 0100101101:${arbolHuffman.decodificar(listabits)}\n")
     print(s"El arbol contiene el caracter:${arbolHuffman.contieneCaracter(" ".charAt(0))}\n")
     print(s"cadena SO ES:${arbolHuffman.codificar(listaletras)}\n")
+    val lista=ListaCharsADistFrec(cadenaAListaChars("Pepe tiene tres pelos"))
+    print(s"Lista de frecuencias de la lista de arriba ${lista}")
   }
 
 }
