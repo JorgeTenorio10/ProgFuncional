@@ -34,6 +34,17 @@ def ListaCharsADistFrec(listaChar: List[Char]): List[(Char, Int)] = {
   contarCaracteres(listaChar, Nil)
 }
 
+def DistribFrecAListaHojas(frec:List[(Char,Int)]):List[HojaHuff]=
+  def DistribFrecAListaHojasAux(frec:List[(Char,Int)],res:List[HojaHuff]):List[HojaHuff]= frec match
+    case Nil=> val hojasOrdenadas = res.sortBy(_.peso)
+                hojasOrdenadas
+    case (cabeza,peso)::resto=> val hojas=HojaHuff(cabeza,peso)::res
+      DistribFrecAListaHojasAux(resto,hojas)
+      
+  DistribFrecAListaHojasAux(frec,Nil)
+
+
+
 abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match
     case HojaHuff(_, peso) => peso
