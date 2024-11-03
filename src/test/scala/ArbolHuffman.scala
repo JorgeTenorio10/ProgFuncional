@@ -40,10 +40,17 @@ def DistribFrecAListaHojas(frec:List[(Char,Int)]):List[HojaHuff]=
                 hojasOrdenadas
     case (cabeza,peso)::resto=> val hojas=HojaHuff(cabeza,peso)::res
       DistribFrecAListaHojasAux(resto,hojas)
-      
+
   DistribFrecAListaHojasAux(frec,Nil)
 
-
+def crearArbolHuffman(cadena:String):ArbolHuffman=
+  val cadenaConvertidaALista=DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListaChars(cadena)))
+  def crearArbolHuffmanAux(hojas:Lista[ArbolHuffman]):RamaHuff= hojas match
+    case primero::segundo::resto=>val rama = crearRamaHuff(primero,segundo)
+                                  val arbolConstruynedose=(rama::resto).sortBy(_.peso)
+                                  crearArbolHuffmanAux(arbolConstruynedose)
+    case _=> arbol
+  crearArbolHuffmanAux(cadenaConvertidaALista)
 
 abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match
@@ -96,3 +103,6 @@ abstract class ArbolHuffman {
       
   case class HojaHuff(caracter: Char, peso: Int) extends ArbolHuffman
 
+object ArbolHuffman{
+  def apply(cadena:String):crearArbolHuffman(cadena)
+}
