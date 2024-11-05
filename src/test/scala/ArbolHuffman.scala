@@ -9,6 +9,7 @@ def listaCharsACadena(caracteres:List[Char]):String=
   caracteres.mkString
 
 def ListaCharsADistFrec(listaChar: List[Char]): List[(Char, Int)] = {
+  @tailrec
   def contarCaracteres(lista: List[Char], acumulado: List[(Char, Int)]): List[(Char, Int)] = {
     lista match {
       case Nil => acumulado // Si la lista está vacía, devolvemos el acumulado actual
@@ -35,7 +36,8 @@ def ListaCharsADistFrec(listaChar: List[Char]): List[(Char, Int)] = {
 }
 
 def DistribFrecAListaHojas(frec:List[(Char,Int)]):List[HojaHuff]=
-  def DistribFrecAListaHojasAux(frec:List[(Char,Int)],res:List[HojaHuff]):List[HojaHuff]= frec match
+  @tailrec
+  def DistribFrecAListaHojasAux(frec:List[(Char,Int)], res:List[HojaHuff]):List[HojaHuff]= frec match
     case Nil=> val hojasOrdenadas = res.sortBy(_.peso)
                 hojasOrdenadas
     case (cabeza,peso)::resto=> val hojas=HojaHuff(cabeza,peso)::res
@@ -56,6 +58,7 @@ def combinar(nodos: List[ArbolHuffman]): List[ArbolHuffman] = nodos match
 def esListaSingleton(lista: List[ArbolHuffman]): Boolean =
   lista.length == 1
 
+@tailrec
 def repetirHasta(combinar: List[ArbolHuffman] => List[ArbolHuffman], esListaSingleton: List[ArbolHuffman] => Boolean)(lista: List[ArbolHuffman]): List[ArbolHuffman] =
   if (esListaSingleton(lista)) lista
   else repetirHasta(combinar, esListaSingleton)(combinar(lista))
@@ -88,7 +91,8 @@ abstract class ArbolHuffman {
     case HojaHuff(_, peso) => peso
     case RamaHuff(nodoIzq, nodoDcho) => peso(nodoIzq) + peso(nodoDcho)
   def contieneCaracter(caracter:Char): Boolean=
-    def contieneCaracterAux(caracter:Char,caracteres:List[Char]): Boolean= caracteres match
+    @tailrec
+    def contieneCaracterAux(caracter:Char, caracteres:List[Char]): Boolean= caracteres match
       case caracterArbol::res if caracterArbol==caracter =>true
       case caracterArbol::res =>contieneCaracterAux(caracter,res)
       case Nil => false
@@ -116,7 +120,7 @@ abstract class ArbolHuffman {
     case RamaHuff(nodoIzq, nodoDch) =>
       if (nodoIzq.contieneCaracter(caracter)) codificarCaracter(caracter, nodoIzq, camino :+ 0)
       else codificarCaracter(caracter, nodoDch, camino :+ 1)
-    case _ if contieneCaracter(caracter)==false => throw new IllegalArgumentException("Carácter no encontrado en el árbol")
+    case _ if !contieneCaracter(caracter) => throw new IllegalArgumentException("Carácter no encontrado en el árbol")
 
 
   def codificar(cadena: String): List[Bit] =
@@ -134,6 +138,6 @@ abstract class ArbolHuffman {
       
   case class HojaHuff(caracter: Char, peso: Int) extends ArbolHuffman
 
-//object ArbolHuffman{
-  //def apply(cadena:String):crearArbolHuffman(cadena)
-//}
+object ArbolHuffman{
+  def apply(cadena:String):crearArbolHuffman(cadena)
+}
