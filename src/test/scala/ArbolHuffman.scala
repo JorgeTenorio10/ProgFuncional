@@ -43,14 +43,45 @@ def DistribFrecAListaHojas(frec:List[(Char,Int)]):List[HojaHuff]=
 
   DistribFrecAListaHojasAux(frec,Nil)
 
-def crearArbolHuffman(cadena:String):ArbolHuffman=
-  val cadenaConvertidaALista=DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListaChars(cadena)))
-  def crearArbolHuffmanAux(hojas:Lista[ArbolHuffman]):RamaHuff= hojas match
-    case primero::segundo::resto=>val rama = crearRamaHuff(primero,segundo)
-                                  val arbolConstruynedose=(rama::resto).sortBy(_.peso)
-                                  crearArbolHuffmanAux(arbolConstruynedose)
-    case _=> arbol
-  crearArbolHuffmanAux(cadenaConvertidaALista)
+def crearRamaHuff(izq: ArbolHuffman, dch: ArbolHuffman): RamaHuff =
+  RamaHuff(izq, dch)
+
+def combinar(nodos: List[ArbolHuffman]): List[ArbolHuffman] = nodos match
+  case primero :: segundo :: resto =>
+    val nuevaRama = crearRamaHuff(primero, segundo)
+    val listaActualizada = (nuevaRama :: resto).sortBy(nodo => nodo.peso(nodo))
+    listaActualizada
+  case _ => nodos
+
+def esListaSingleton(lista: List[ArbolHuffman]): Boolean =
+  lista.length == 1
+
+def repetirHasta(combinar: List[ArbolHuffman] => List[ArbolHuffman], esListaSingleton: List[ArbolHuffman] => Boolean)(lista: List[ArbolHuffman]): List[ArbolHuffman] =
+  if (esListaSingleton(lista)) lista
+  else repetirHasta(combinar, esListaSingleton)(combinar(lista))
+
+def crearArbolHuffman(cadena: String): ArbolHuffman = 
+  // Paso 1: Convertir la cadena en lista de caracteres
+  val listaChars = cadenaAListaChars(cadena)
+
+  // Paso 2: Distribución de frecuencias de la lista de caracteres
+  val distribucionFrecuencias = ListaCharsADistFrec(listaChars)
+
+  // Paso 3: Convertir la distribución de frecuencias en lista de hojas
+  val listaHojas = DistribFrecAListaHojas(distribucionFrecuencias)
+
+  // Paso 4: Crear el árbolHuffman usando repetirHasta
+  repetirHasta(combinar, esListaSingleton)(listaHojas).head
+
+
+//def crearArbolHuffman(cadena:String):ArbolHuffman=
+  //val cadenaConvertidaALista=DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListaChars(cadena)))
+  //def crearArbolHuffmanAux(hojas:List[ArbolHuffman]):RamaHuff= hojas match
+  //case primero::segundo::resto=>val rama = crearRamaHuff(primero,segundo)
+                                  //val arbolConstruynedose=(rama::resto).sortBy(_.peso)
+                                //crearArbolHuffmanAux(arbolConstruynedose)
+  //case _=> arbol
+//crearArbolHuffmanAux(cadenaConvertidaALista)
 
 abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match
@@ -103,6 +134,6 @@ abstract class ArbolHuffman {
       
   case class HojaHuff(caracter: Char, peso: Int) extends ArbolHuffman
 
-object ArbolHuffman{
-  def apply(cadena:String):crearArbolHuffman(cadena)
-}
+//object ArbolHuffman{
+  //def apply(cadena:String):crearArbolHuffman(cadena)
+//}
