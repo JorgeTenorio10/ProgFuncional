@@ -138,6 +138,6 @@ abstract class ArbolHuffman {
       
   case class HojaHuff(caracter: Char, peso: Int) extends ArbolHuffman
 
-object ArbolHuffman{
-  def apply(cadena:String):crearArbolHuffman(cadena)
+object ArbolHuffman {
+  def apply(cadena: String): ArbolHuffman = crearArbolHuffman(cadena)
 }

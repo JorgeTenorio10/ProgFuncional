@@ -21,7 +21,8 @@ object Main extends ArbolHuffman {
     val lista2:String="Pepe tiene tres pelos"
     print(s"Lista de frecuencias de la lista de arriba ${lista}\n")
     print(s"Lista de frecuencias ordenada y pasado a hojas ${DistribFrecAListaHojas(lista)}\n")
-    print(s"Arboleado ${crearArbolHuffman(lista2)}")
+    val miArbol= ArbolHuffman("texto para construir el arbol huffman")
+    print(s"arboleado ${miArbol}")
   }
 
 }
