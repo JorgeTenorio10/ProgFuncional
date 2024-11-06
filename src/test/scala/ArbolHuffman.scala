@@ -1,7 +1,14 @@
 import scala.annotation.tailrec
 
 type Bit = 0 | 1
+type TablaCodigos = List[(Char,List[Bit])]
 
+def deArbolATabla(arbol:ArbolHuffman):TablaCodigos=
+  def deArbolATablaAux(arbol:ArbolHuffman,camino: List[Bit]): TablaCodigos= arbol match
+    case HojaHuff(caracter,_)=>List((caracter,camino))
+    case RamaHuff(izq,dcho)=> deArbolATablaAux(izq,camino:+0)++ deArbolATablaAux(dcho,camino:+1)
+  deArbolATablaAux(arbol,List())  
+  
 def cadenaAListaChars(cadena:String):List[Char]=
   cadena.toList
 
@@ -64,16 +71,16 @@ def repetirHasta(combinar: List[ArbolHuffman] => List[ArbolHuffman], esListaSing
   else repetirHasta(combinar, esListaSingleton)(combinar(lista))
 
 def crearArbolHuffman(cadena: String): ArbolHuffman = 
-  // Paso 1: Convertir la cadena en lista de caracteres
+  //Convertimos la cadena en lista de caracteres
   val listaChars = cadenaAListaChars(cadena)
 
-  // Paso 2: Distribución de frecuencias de la lista de caracteres
+  // Distribución de frecuencias de la lista de caracteres
   val distribucionFrecuencias = ListaCharsADistFrec(listaChars)
 
-  // Paso 3: Convertir la distribución de frecuencias en lista de hojas
+  // Convertimos la distribución de frecuencias en lista de hojas
   val listaHojas = DistribFrecAListaHojas(distribucionFrecuencias)
 
-  // Paso 4: Crear el árbolHuffman usando repetirHasta
+  // Creamos el árbolHuffman usando repetirHasta
   repetirHasta(combinar, esListaSingleton)(listaHojas).head
 
 

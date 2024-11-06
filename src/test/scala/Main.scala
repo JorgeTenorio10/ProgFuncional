@@ -22,7 +22,8 @@ object Main extends ArbolHuffman {
     print(s"Lista de frecuencias de la lista de arriba ${lista}\n")
     print(s"Lista de frecuencias ordenada y pasado a hojas ${DistribFrecAListaHojas(lista)}\n")
     val miArbol= ArbolHuffman("texto para construir el arbol huffman")
-    print(s"arboleado ${miArbol}")
+    print(s"arboleado ${miArbol}\n")
+    print(s"prueba${deArbolATabla(miArbol)}")
   }
 
 }
