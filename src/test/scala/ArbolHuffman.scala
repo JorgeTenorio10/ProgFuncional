@@ -7,8 +7,49 @@ def deArbolATabla(arbol:ArbolHuffman):TablaCodigos=
   def deArbolATablaAux(arbol:ArbolHuffman,camino: List[Bit]): TablaCodigos= arbol match
     case HojaHuff(caracter,_)=>List((caracter,camino))
     case RamaHuff(izq,dcho)=> deArbolATablaAux(izq,camino:+0)++ deArbolATablaAux(dcho,camino:+1)
-  deArbolATablaAux(arbol,List())  
-  
+  deArbolATablaAux(arbol,List())
+
+  def codificarCurri(tabla: TablaCodigos)(cadena: String): List[Bit] =
+    def buscarCodigo(caracter: Char, tabla: TablaCodigos): List[Bit] = tabla match
+      case (c, bits) :: _ if c == caracter => bits
+      case _ :: resto => buscarCodigo(caracter, resto)
+      case Nil => throw new IllegalArgumentException(s"'$caracter' no se encuentra en la tabla")
+
+
+    // Para cada carácter obtenemos el codigo y lo añadimos a la lista de bits
+    def codificarCurriAux(c: List[Char], res: List[Bit]): List[Bit] = c match
+      case Nil => res
+      case c :: resto => val codigo = buscarCodigo(c, tabla)
+        codificarCurriAux(resto, res ++ codigo)
+
+    codificarCurriAux(cadena.toList, List())
+
+
+  def decodificarCurri(tabla: TablaCodigos)(bits: List[Bit]): String =
+    // Función auxiliar para buscar el carácter que corresponde a la secuencia de bits inicial
+    def buscarCaracter(bits: List[Bit], tabla: TablaCodigos): (Char, List[Bit]) = tabla match
+      case (c, codigo) :: _ if empiezaCon(bits, codigo) => (c, bits.drop(codigo.length))
+      case _ :: resto => buscarCaracter(bits, resto)
+      case Nil => throw new IllegalArgumentException("Este código no está en la tabla")
+
+    // Función auxiliar para comparar si una lista de bits comienza con otra
+    def empiezaCon(bits: List[Bit], prefijo: List[Bit]): Boolean =
+      (bits, prefijo) match
+        case (_, Nil) => true
+        case (h :: t, he :: ta) if h == he => empiezaCon(t, ta)
+        case _ => false
+
+    // Decodifica recursivamente bits, construyendo la lista de caracteres decodificados
+    def decodificarCurriAux(bitsRestantes: List[Bit], resultado: List[Char]): List[Char] =
+      if (bitsRestantes.isEmpty) resultado
+      else
+        val (caracter, nuevosBitsRestantes) = buscarCaracter(bitsRestantes, tabla)
+        decodificarCurriAux(nuevosBitsRestantes, resultado :+ caracter)
+
+    // Convertimos la lista de caracteres en una cadena final y la retornamos
+    decodificarCurriAux(bits, List()).mkString
+
+
 def cadenaAListaChars(cadena:String):List[Char]=
   cadena.toList
 
@@ -83,15 +124,8 @@ def crearArbolHuffman(cadena: String): ArbolHuffman =
   // Creamos el árbolHuffman usando repetirHasta
   repetirHasta(combinar, esListaSingleton)(listaHojas).head
 
+  
 
-//def crearArbolHuffman(cadena:String):ArbolHuffman=
-  //val cadenaConvertidaALista=DistribFrecAListaHojas(ListaCharsADistFrec(cadenaAListaChars(cadena)))
-  //def crearArbolHuffmanAux(hojas:List[ArbolHuffman]):RamaHuff= hojas match
-  //case primero::segundo::resto=>val rama = crearRamaHuff(primero,segundo)
-                                  //val arbolConstruynedose=(rama::resto).sortBy(_.peso)
-                                //crearArbolHuffmanAux(arbolConstruynedose)
-  //case _=> arbol
-//crearArbolHuffmanAux(cadenaConvertidaALista)
 
 abstract class ArbolHuffman {
   def peso(arbol: ArbolHuffman): Int = arbol match

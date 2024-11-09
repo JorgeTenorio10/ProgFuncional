@@ -24,6 +24,8 @@ object Main extends ArbolHuffman {
     val miArbol= ArbolHuffman("texto para construir el arbol huffman")
     print(s"arboleado ${miArbol}\n")
     print(s"prueba${deArbolATabla(miArbol)}")
+    print(s"prueba${codificarCurri(deArbolATabla(miArbol))(listaletras)}\n")
   }
+  
 
 }
